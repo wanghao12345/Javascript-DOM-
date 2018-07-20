@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+ <head>
+	  <meta charset="UTF-8">
+	  <meta name="Keywords" content="">
+	  <meta name="Description" content="">
+	  <title>鼠标方位判断 - 新奇老师</title>
+	  <link rel="stylesheet" type="text/css" href="./css/index.css">
+ </head>
+<body>
+	<div id='box'>
+		<ul id="list">
+			<li>
+				<img src='images/1.jpg'/>
+				<a href='#'>
+					<p class='p1'>秋冬上新 领券立减20</p>
+					<p>点击进入</p>
+				</a>
+			</li>
+			<li>
+				<img src='images/2.jpg'/>
+				<a href='#'>
+					<p class='p1'>钜惠满138减15</p>
+					<p>点击进入</p>
+				</a>
+			</li>
+			<li>
+				<img src='images/3.jpg'/>
+				<a href='#'>
+					<p class='p1'>冬装尖品 强势登陆</p>
+					<p>点击进入</p>
+				</a>
+			</li>
+			<li>
+				<img src='images/4.jpg'/>
+				<a href='#'>
+					<p class='p1'>十一国庆除出游季</p>
+					<p>购新衣才够【型】</p>
+				</a>
+			</li>
+			<li>
+				<img src='images/5.jpg'/>
+				<a href='#'>
+					<p class='p1'>秋上新</p>
+					<p>点击进入</p>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<script>
+		var oBox = document.getElementById('box');
+		var aLi = oBox.getElementsByTagName('li');
+
+		for (var i = 0; i < aLi.length; i++) {
+			aLi[i].onmouseenter = function (e) {
+				var x = e.clientX;
+				var y = e.clientY;
+
+				var oT = this.offsetTop;
+				var oB = oT + this.offsetHeight;
+				var oL = this.offsetLeft;
+				var oR = oL + this.offsetWidth;
+
+				// 差值
+				var diffT = Math.abs(y - oT);
+				var diffB = Math.abs(y - oB);
+				var diffL = Math.abs(x - oL);
+				var diffR = Math.abs(x - oR);
+
+				var minVal = Math.min(diffT, diffB, diffR, diffL);
+				switch (minVal) {
+					case diffT:
+						console.log('上');
+						break;
+					case diffB:
+						console.log('下');
+						break;
+					case diffL:
+						console.log('左');
+						break;
+					case diffR:
+						console.log('右');
+						break;
+				}
+
+			}
+		}
+
+
+
+
+
+
+		/**
+		 * DOM操作：增删改查
+		 *
+		 * 获取元素：
+		 *   get   原生
+		 *   $	  JQ
+		 *   query H5
+		 *   
+		 * 实现鼠标的方位判断：
+		 * 	 1. 循环遍历li: 来确立是哪一个li
+		 * 	 2. 鼠标方位判断
+		 * 	   2.1 做鼠标移入的方位判断
+		 * 	   	 特效：已知条件推断未知条件
+		 * 	   	 2.1.1 已知条件：
+		 * 	   	 	鼠标的坐标位置（x, y）
+		 * 	   	 	li的宽高度
+		 * 	   	 	li各个边距离浏览器顶部以及左部的边距
+		 * 	   	 2.1.2 未知条件：
+		 * 	   	 	2.1.2.1 获取鼠标坐标位置
+		 * 	   	 	2.1.2.2 获取当前元素上下边距离浏览器顶部的间距和左右边距离浏览器左部的距离
+		 * 	   	 	2.1.2.3 计算鼠标与各个边的距离
+		 * 	   	 	
+		 * 	   2.2 遮罩层的运动动画
+		 * 	   2.3 代码重构
+		 */
+	</script>
+</body>
+</html>
