@@ -52,42 +52,116 @@
 		var aLi = oBox.getElementsByTagName('li');
 
 		for (var i = 0; i < aLi.length; i++) {
-			aLi[i].onmouseenter = function (e) {
-				var x = e.clientX;
-				var y = e.clientY;
+			aLi[i].onmouseenter = function (e) { // 鼠标移入
+				move.call(this,e);
+			}
+			aLi[i].onmouseleave = function (e) { //鼠标移出
+				move.call(this,e);
+			}
+		}
 
-				var oT = this.offsetTop;
-				var oB = oT + this.offsetHeight;
-				var oL = this.offsetLeft;
-				var oR = oL + this.offsetWidth;
+		function move(e) {
+			var x = e.clientX;
+			var y = e.clientY;
 
-				// 差值
-				var diffT = Math.abs(y - oT);
-				var diffB = Math.abs(y - oB);
-				var diffL = Math.abs(x - oL);
-				var diffR = Math.abs(x - oR);
+			var oT = this.offsetTop;
+			var oB = oT + this.offsetHeight;
+			var oL = this.offsetLeft;
+			var oR = oL + this.offsetWidth;
 
-				var minVal = Math.min(diffT, diffB, diffR, diffL);
-				switch (minVal) {
-					case diffT:
-						console.log('上');
-						break;
-					case diffB:
-						console.log('下');
-						break;
-					case diffL:
-						console.log('左');
-						break;
-					case diffR:
-						console.log('右');
-						break;
-				}
+			// 差值
+			var diffT = Math.abs(y - oT);
+			var diffB = Math.abs(y - oB);
+			var diffL = Math.abs(x - oL);
+			var diffR = Math.abs(x - oR);
 
+			var minVal = Math.min(diffT, diffB, diffR, diffL);
+			var val = e.type;
+			switch (minVal) {
+				case diffT:
+					moveTo('top', val, this, -360, 0);
+					break;
+				case diffB:
+					moveTo('bottom', val, this, -360, 0);
+					break;
+				case diffL:
+					moveTo('left', val, this, -230, 0);
+					break;
+				case diffR:
+					moveTo('right', val, this, -230, 0);
+					break;
 			}
 		}
 
 
+		function moveTo(aspect,a, aim,from,to) {
+			if (aspect === 'top') {
+				if (a==='mouseenter') {
+					aim.children[1].css(from, aspect).enter(to, aspect);
+				} else {
+					aim.children[1].leave(from, aspect);
+				}
+			}
+			if (aspect === 'bottom') {
+				if (a==='mouseenter') {
+					aim.children[1].css(from, aspect).enter(to, aspect);
+				} else {
+					aim.children[1].leave(from, aspect);
+				}
+			}
+			if (aspect === 'left') {
+				if (a==='mouseenter') {
+					aim.children[1].css(from, aspect).enter(to, aspect);
+				} else {
+					aim.children[1].leave(from, aspect);
+				}
+			}
+			if (aspect === 'right') {
+				if (a==='mouseenter') {
+					aim.children[1].css(from, aspect).enter(to, aspect);
+				} else {
+					aim.children[1].leave(from, aspect);
+				}
+			}
+		}
+		//链式动画封装
+		Node.prototype.css = function (from,aspect) {
+			this.style['top'] = 'auto';
+			this.style['bottom'] = 'auto';
+			this.style['left'] = 'auto';
+			this.style['right'] = 'auto';
+			if (aspect == 'top') {
+				this.style['left'] = '0px';
+				this.style[aspect] = from + 'px';
+			}
+			if (aspect == 'bottom') {
+				this.style['left'] = '0px';
+				this.style[aspect] = from + 'px';
+			}
+			if (aspect == 'left') {
+				this.style['top'] = '0px';
+				this.style[aspect] = from + 'px';
+			}
+			if (aspect == 'right') {
+				this.style['top'] = '0px';
+				this.style[aspect] = from + 'px';
+			}			
+			return this;
+		}
 
+		Node.prototype.enter = function (to, aspect) {
+			window.setTimeout(function(){
+				this.style[aspect] = to + 'px';
+				this.style.transition = '.3s';
+			}.bind(this), 0);	
+			return this;
+		}
+
+		Node.prototype.leave = function (from, aspect) {
+			this.style[aspect] = from + 'px';
+			this.style.transition = '.3s';
+			return this;
+		}
 
 
 
@@ -112,8 +186,17 @@
 		 * 	   	 	2.1.2.1 获取鼠标坐标位置
 		 * 	   	 	2.1.2.2 获取当前元素上下边距离浏览器顶部的间距和左右边距离浏览器左部的距离
 		 * 	   	 	2.1.2.3 计算鼠标与各个边的距离
-		 * 	   	 	
 		 * 	   2.2 遮罩层的运动动画
+		 * 	   		分支判断：
+		 * 	   			上下左右
+		 * 	   		运动动画的原理：
+		 * 	   			第一步： 先跑上去
+		 * 	   				瞬间上去
+		 * 	   			第二步： 再跑下来
+		 * 	   				有动画的跑下来
+		 * 	   			实现的技术： 链式操作
+		 * 	   				obj.css().siblings().removeClass().animate();
+		 * 	   				原理： 对象.方法(返回当前对象).方法(返回对象),后面的方法就可以继续在this环境下执行
 		 * 	   2.3 代码重构
 		 */
 	</script>
